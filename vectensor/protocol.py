@@ -1,7 +1,6 @@
 # The MIT License (MIT)
 # Copyright © 2023 Yuma Rao
-# TODO(developer): Set your name
-# Copyright © 2023 <your name>
+# Copyright © 2024 soywod <clement.douin@posteo.net>
 
 # Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 # documentation files (the “Software”), to deal in the Software without restriction, including without limitation
@@ -28,7 +27,7 @@ import bittensor as bt
 
 # ---- miner ----
 # Example usage:
-#   def dummy( synapse: Dummy ) -> Dummy:
+#   def dummy( synapse: VectensorSynapse ) -> VectensorSynapse:
 #       synapse.dummy_output = synapse.dummy_input + 1
 #       return synapse
 #   axon = bt.axon().attach( dummy ).serve(netuid=...).start()
@@ -36,11 +35,11 @@ import bittensor as bt
 # ---- validator ---
 # Example usage:
 #   dendrite = bt.dendrite()
-#   dummy_output = dendrite.query( Dummy( dummy_input = 1 ) )
+#   dummy_output = dendrite.query( VectensorSynapse( dummy_input = 1 ) )
 #   assert dummy_output == 2
 
 
-class Dummy(bt.Synapse):
+class VectensorSynapse(bt.Synapse):
     """
     A simple dummy protocol representation which uses bt.Synapse as its base.
     This protocol helps in handling dummy request and response communication between
@@ -67,8 +66,8 @@ class Dummy(bt.Synapse):
         - int: The deserialized response, which in this case is the value of dummy_output.
 
         Example:
-        Assuming a Dummy instance has a dummy_output value of 5:
-        >>> dummy_instance = Dummy(dummy_input=4)
+        Assuming a VectensorSynapse instance has a dummy_output value of 5:
+        >>> dummy_instance = VectensorSynapse(dummy_input=4)
         >>> dummy_instance.dummy_output = 5
         >>> dummy_instance.deserialize()
         5

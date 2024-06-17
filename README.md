@@ -288,7 +288,7 @@ print(data)
 In order to see real-world examples of subnets in-action, see the `subnet_links.py` document or access them from inside the `template` package by:
 ```python
 import template
-template.SUBNET_LINKS
+vectensor.SUBNET_LINKS
 [{'name': 'sn0', 'url': ''},
  {'name': 'sn1', 'url': 'https://github.com/opentensor/prompting/'},
  {'name': 'sn2', 'url': 'https://github.com/bittranslateio/bittranslate/'},

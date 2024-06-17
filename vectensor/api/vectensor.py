@@ -19,17 +19,17 @@
 
 import bittensor as bt
 from typing import List, Optional, Union, Any, Dict
-from template.protocol import Dummy
+from vectensor.protocol import VectensorSynapse
 from bittensor.subnets import SubnetsAPI
 
 
-class DummyAPI(SubnetsAPI):
+class VectensorSynapseAPI(SubnetsAPI):
     def __init__(self, wallet: "bt.wallet"):
         super().__init__(wallet)
         self.netuid = 33
         self.name = "dummy"
 
-    def prepare_synapse(self, dummy_input: int) -> Dummy:
+    def prepare_synapse(self, dummy_input: int) -> VectensorSynapse:
         synapse.dummy_input = dummy_input
         return synapse
 

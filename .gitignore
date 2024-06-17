@@ -163,3 +163,7 @@ testing/
 
 # Editors
 .vscode/settings.json
+
+# Direnv
+.envrc
+.direnv
