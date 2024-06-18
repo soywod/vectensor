@@ -16,25 +16,40 @@
 # OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 import numpy as np
+import io
+import sewar.full_ref as sewar
 from typing import List
+from base64 import b64decode
+from svglib.svglib import svg2rlg
+from reportlab.graphics import renderPM
+
+from vectensor.protocol import VectensorSynapse
 
 
-def reward(query: int, response: int) -> float:
-    """
-    Reward the miner response to the dummy request. This method returns a reward
-    value for the miner, which is used to update the miner's score.
+def reward(image: bytes, response: VectensorSynapse) -> float:
+    svg = io.BytesIO(b"")
+    drawing = svg2rlg(response.output)
+    renderPM.drawToFile(drawing, svg, fmt="PNG")
 
-    Returns:
-    - float: The reward value for the miner.
-    """
+    # msg = sewar.mse(svg, image)
+    # rmse = sewar.rmse(svg, image)
+    # psnr = sewar.psnr(svg, image)
+    # ssim = sewar.ssim(svg, image)
+    # msssim= sewar.msssim(svg, image)
+    # ergas = sewar.ergas(svg, image)
+    # scc = sewar.scc(svg, image)
+    # rase = sewar.rase(svg, image)
+    # sam = sewar.sam(svg, image)
+    # vifp = sewar.vifp(svg, image)
 
-    return 1.0 if response == query * 2 else 0
+    uqi = sewar.uqi(svg, image)
+    return uqi
 
 
 def get_rewards(
     self,
-    query: int,
-    responses: List[float],
+    image: bytes,
+    responses: List[VectensorSynapse],
 ) -> np.ndarray:
     """
     Returns an array of rewards for the given query and responses.
@@ -52,5 +67,5 @@ def get_rewards(
     # Remove any None values
     responses = [response for response in responses if response is not None]
     return np.array(
-        [reward(query, int(response)) for response in responses]
+        [reward(image, int(response)) for response in responses]
     )

@@ -1,5 +1,4 @@
 # The MIT License (MIT)
-# Copyright © 2023 Yuma Rao
 # Copyright © 2024 soywod <clement.douin@posteo.net>
 
 # Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
@@ -16,32 +15,13 @@
 # OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-import typing
-import bittensor as bt
+import os
 
 
-class VectensorSynapse(bt.Synapse):
-    """
-    The vectensor protocol representation which uses bt.Synapse as its base.
-    This protocol helps in handling vectensor request and response communication
-    between the miner and the validator.
-
-    Attributes:
-    - input: The image as base64 string sent by the validator.
-    - output: The vectorized input, as raw XML SVG string.
-    """
-    
-    # Required request input (image as base64 string), filled by sending dendrite caller.
-    input: str
-    
-    # Optional request output (SVG as raw XML string), filled by receiving axon.
-    output: typing.Optional[str] = None
-
-    def deserialize(self) -> str:
-        """
-        Deserialize the miner response (output).
-
-        Returns:
-        - str: The deserialized response, which is the SVG as raw XML string.
-        """
-        return self.output
+async def image():
+    dir = os.path.dirname(os.path.realpath(__file__))
+    path = os.path.join(dir, "eth.jpeg")
+    f = open(path, mode="rb")
+    data = f.read()
+    f.close()
+    return data

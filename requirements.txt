@@ -1,2 +1,5 @@
 bittensor
+potracer
+sewar
+svglib
 torch

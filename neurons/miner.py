@@ -19,11 +19,9 @@
 import time
 import typing
 import bittensor as bt
+from base64 import b64decode
 
-# Bittensor Miner Template:
-import template
-
-# import base miner class which takes care of most of the boilerplate
+import vectensor
 from vectensor.base.miner import BaseMinerNeuron
 
 
@@ -38,8 +36,6 @@ class Miner(BaseMinerNeuron):
 
     def __init__(self, config=None):
         super(Miner, self).__init__(config=config)
-
-        # TODO(developer): Anything specific to your use case you can do here
 
     async def forward(
         self, synapse: vectensor.protocol.VectensorSynapse
@@ -57,8 +53,35 @@ class Miner(BaseMinerNeuron):
         The 'forward' function is a placeholder and should be overridden with logic that is appropriate for
         the miner's intended operation. This method demonstrates a basic transformation of input data.
         """
-        # TODO(developer): Replace with actual implementation logic.
-        synapse.dummy_output = synapse.dummy_input * 2
+        
+        image = b64decode(synapse.input)
+        bm = Bitmap(image, blacklevel=0.5)
+        plist = bm.trace(
+            turdsize=2,
+            turnpolicy=POTRACE_TURNPOLICY_MINORITY,
+            alphamax=1,
+            opticurve=False,
+            opttolerance=0.2,
+        )
+
+        synapse.output = f'<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="{image.width}" height="{image.height}" viewBox="0 0 {image.width} {image.height}">'
+        parts = []
+        for curve in plist:
+            fs = curve.start_point
+            parts.append(f"M{fs.x},{fs.y}")
+            for segment in curve.segments:
+                if segment.is_corner:
+                    a = segment.c
+                    b = segment.end_point
+                    parts.append(f"L{a.x},{a.y}L{b.x},{b.y}")
+                else:
+                    a = segment.c1
+                    b = segment.c2
+                    c = segment.end_point
+                    parts.append(f"C{a.x},{a.y} {b.x},{b.y} {c.x},{c.y}")
+            parts.append("z")
+        synapse.output += f'<path stroke="none" fill="black" fill-rule="evenodd" d="{"".join(parts)}"/>'
+        synapse.output += "</svg>"
         return synapse
 
     async def blacklist(
