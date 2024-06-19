@@ -20,17 +20,23 @@ import io
 import sewar.full_ref as sewar
 from typing import List
 from base64 import b64decode
-from svglib.svglib import svg2rlg
-from reportlab.graphics import renderPM
+from cairosvg import svg2png
+from PIL import Image
 
 from vectensor.protocol import VectensorSynapse
 
 
-def reward(image: bytes, response: VectensorSynapse) -> float:
-    svg = io.BytesIO(b"")
-    drawing = svg2rlg(response.output)
-    renderPM.drawToFile(drawing, svg, fmt="PNG")
+def write_svg_to_png(svg: str, b: io.BytesIO):
+    svg2png(bytestring=svg.encode(), write_to=b)
 
+def reward(image_orig: io.BytesIO, svg: str) -> float:
+    image_vec = io.BytesIO()
+    write_svg_to_png(svg, image_vec)
+
+    print(f"got: {Image.open(image_vec).size}")
+    expected = np.asarray(Image.open(image_orig))
+    got = np.asarray(Image.open(image_vec))[]
+    
     # msg = sewar.mse(svg, image)
     # rmse = sewar.rmse(svg, image)
     # psnr = sewar.psnr(svg, image)
@@ -42,7 +48,7 @@ def reward(image: bytes, response: VectensorSynapse) -> float:
     # sam = sewar.sam(svg, image)
     # vifp = sewar.vifp(svg, image)
 
-    uqi = sewar.uqi(svg, image)
+    uqi = sewar.uqi(got, expected)
     return uqi
 
 
@@ -67,5 +73,5 @@ def get_rewards(
     # Remove any None values
     responses = [response for response in responses if response is not None]
     return np.array(
-        [reward(image, int(response)) for response in responses]
+        [reward(image, response.output) for response in responses]
     )

@@ -21,8 +21,8 @@ import torch
 import unittest
 import bittensor as bt
 
-from neurons.validator import Neuron as Validator
-from neurons.miner import Neuron as Miner
+from neurons.validator import Validator
+from neurons.miner import Miner
 
 from vectensor.protocol import VectensorSynapse
 from vectensor.validator.forward import forward
@@ -40,7 +40,7 @@ class VectensorValidatorNeuronTestCase(unittest.TestCase):
     """
 
     def setUp(self):
-        sys.argv = sys.argv[0] + ["--config", "tests/configs/validator.json"]
+        # sys.argv = sys.argv[0] + ["--config", "tests/configs/validator.json"]
 
         config = BaseValidatorNeuron.config()
         config.wallet._mock = True

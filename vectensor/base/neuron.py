@@ -25,7 +25,7 @@ from abc import ABC, abstractmethod
 # Sync calls set weights and also resyncs the metagraph.
 from vectensor.utils.config import check_config, add_args, config
 from vectensor.utils.misc import ttl_get_block
-from vectensor.import __spec_version__ as spec_version
+from vectensor import __spec_version__ as spec_version
 from vectensor.mock import MockSubtensor, MockMetagraph
 
 

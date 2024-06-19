@@ -23,7 +23,7 @@ import time
 import bittensor as bt
 
 # Bittensor Validator Template:
-import template
+import vectensor
 from vectensor.validator import forward
 
 # import base validator class which takes care of most of the boilerplate

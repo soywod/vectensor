@@ -1,5 +1,5 @@
 bittensor
+cairosvg
 potracer
 sewar
-svglib
 torch
